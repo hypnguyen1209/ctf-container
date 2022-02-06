@@ -12,8 +12,6 @@ RUN adduser --disabled-password --gecos "" user
 
 COPY ./entrypoint.sh /entrypoint.sh
 
-COPY ./server.js .
-
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000
