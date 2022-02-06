@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <div class="columns is-centered">
+            <div class="column is-half">
+                <article class="message">
+                    <div class="message-header">
+                        <p>
+                            <%= title %>
+                        </p>
+                    </div>
+                    <div class="message-body">
+                        <div class="control">
+                            <% if (is_start) { %>
+                                <div class="is-size-4">
+                                    Machine started:
+                                    <strong>
+                                        <script>document.write(`${window.location.protocol}//${window.location.hostname}:<%= port %>`)</script>
+                                    </strong>
+                                </div>
+                                <div class="is-size-4">
+                                    Alive:
+                                    <strong>
+                                        <span id="time" class="is-hidden">
+                                            <%= countdown %>
+                                        </span>
+                                        <span id="countdown"></span>
+                                    </strong>
+                                </div>
+                                <% } else { %>
+                                    <form style="text-align: center;" action="" method="post"
+                                        enctype="application/x-www-form-urlencoded">
+                                        <div class="h-captcha" data-sitekey="<%= site_key %>">
+                                        </div>
+                                        <input onclick="this.disabled=true;this.value='STARTING...';this.form.submit()"
+                                            class="button is-primary is-outlined is-danger is-fullwidth" type="submit"
+                                            value="START MACHINE" />
+                                    </form>
+                                    <% } %>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</body>
+<% if (is_start) {%>
+    <script>
+            (() => {
+                let countDown = parseInt(document.getElementById('time').innerText) * 60 // time for machine alive
+                let timeToCountDown = new Date().getTime() + countDown * 1000 + 1000
+                let instance = setInterval(() => {
+                    let now = new Date().getTime()
+                    let distance = timeToCountDown - now
+                    document.getElementById('countdown').innerHTML = `${Math.floor(distance / (60 * 1000))}m ${Math.floor(distance % (60 * 1000) / 1000)}s`
+                    if (distance <= 0) {
+                        window.location.reload()
+                        clearInterval(instance)
+                    }
+                })
+            })()
+    </script>
+    <% } %>
+
+</html>
