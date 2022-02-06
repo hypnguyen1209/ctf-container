@@ -7,9 +7,9 @@ const exec = util.promisify(require('child_process').exec)
  * @param {int} port port use deploy container
  */
 const startContainer = async port => {
-    await exec(`./deploy/run_container.sh ${PORT}`)
+    await exec(`./deploy/run_container.sh ${port}`)
     setTimeout(async _ => {
-        await exec(`./deploy/destroy.sh ${PORT}`)
+        await exec(`./deploy/destroy.sh ${port}`)
     }, process.env.TIMERUNNING * 60 * 1000)
 }
 
